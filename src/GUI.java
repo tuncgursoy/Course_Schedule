@@ -74,11 +74,17 @@ public class GUI {
     private JTextField f10;
     private JTextField f11;
     private JButton calculateButton;
+    private JButton deleteSectionButton;
+    private JButton deleteLessonButton;
     private JButton csvReadButton;
     static JFrame addSection;
     static JFrame addLesson;
+    static JFrame deleteLesson;
     static JButton tempAddLesson;
+    static JButton tempDeleteSectionButton;
     static JButton tempAddSection;
+    static JButton tempDeleteLesson;
+    static JFrame deleteSection;
 
     GUI()
     {
@@ -279,5 +285,41 @@ public class GUI {
             }
         });
 
+        deleteSectionButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                deleteSection = new JFrame();
+                deleteSection.setContentPane(new DeleteSection().panel);
+                deleteSection.setVisible(true);
+                deleteSection.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+                int w = deleteSection.getSize().width;
+                int h = deleteSection.getSize().height;
+                int x = (dim.width-w)/2;
+                int y = (dim.height-h)/2;
+                deleteSection.setLocation(x, y);
+                deleteSection.setResizable(false);
+                tempDeleteSectionButton = deleteSectionButton;
+                deleteSection.pack();
+            }
+        });
+        deleteLessonButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                deleteLesson = new JFrame();
+                deleteLesson.setContentPane(new DeleteLesson().panel);
+                deleteLesson.setVisible(true);
+                deleteLesson.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+                int w = deleteLesson.getSize().width;
+                int h = deleteLesson.getSize().height;
+                int x = (dim.width-w)/2;
+                int y = (dim.height-h)/2;
+                deleteLesson.setLocation(x, y);
+                deleteLesson.setResizable(false);
+                tempDeleteLesson = deleteLessonButton;
+                deleteLesson.pack();
+            }
+        });
     }
 }
