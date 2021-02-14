@@ -1,11 +1,14 @@
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class GUI {
     private JButton newProgramButton;
@@ -76,6 +79,8 @@ public class GUI {
     private JButton calculateButton;
     private JButton deleteSectionButton;
     private JButton deleteLessonButton;
+    private JButton saveButton;
+    private JButton openProgramButton;
     private JButton csvReadButton;
     static JFrame addSection;
     static JFrame addLesson;
@@ -132,6 +137,7 @@ public class GUI {
             }
         });
         calculateButton.addActionListener(e -> {
+            staticVar.options = null;
             staticVar.options = new ArrayList[staticVar.lessons.lessons.size()];
            for (int i = 0 ; i<staticVar.lessons.lessons.size();i++)
            {
@@ -173,6 +179,7 @@ public class GUI {
                }
                i++;
            }
+           comboBox1.removeAllItems();
            for (option option : staticVar.options[staticVar.lessons.lessons.size()-1])
            {
                if (option.isAvailable) {
@@ -321,5 +328,147 @@ public class GUI {
                 deleteLesson.pack();
             }
         });
+        saveButton.addActionListener(e -> {
+            String current = "";
+            try {
+                 current = new File( "." ).getCanonicalPath();
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
+            File directory = new File(current+"\\Plans");
+            String fileName = JOptionPane.showInputDialog("Enter File Name");
+            if (fileName.equals(""))
+            {
+                DateTimeFormatter dtf = DateTimeFormatter.ofPattern("mm-dd-ss");
+                LocalDateTime now = LocalDateTime.now();
+                fileName = dtf.format(now);
+            }
+            File txt = new File(current+"\\Plans\\"+fileName+".cs");
+            try {
+                txt.createNewFile();
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
+            FileWriter  out = null;
+            try {
+                out = new FileWriter(current+"\\Plans\\"+fileName+".cs");
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
+            for (lesson i : staticVar.lessons.lessons)
+            {
+                for (section t : i.sections) {
+                    try {
+                        out.write(i.code+"~"+i.credit+"~"+Convert(t)+"\n");
+                    } catch (IOException ioException) {
+                        ioException.printStackTrace();
+                    }
+                }
+            }
+            try {
+                out.close();
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
+            JOptionPane.showMessageDialog(new JFrame(), "Saved to "+ current+"\\Plans\\"+fileName+".cs");
+
+
+
+        });
+        openProgramButton.addActionListener(e -> {
+            JFileChooser fileChooser = new JFileChooser();
+            File f = null;
+            try {
+                 f = new File(new File(".").getCanonicalPath()+"\\Plans");
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
+            fileChooser.setCurrentDirectory(f);
+            fileChooser.setAcceptAllFileFilterUsed(false);
+            FileNameExtensionFilter filter = new FileNameExtensionFilter("Course Schedule", "cs");
+            fileChooser.addChoosableFileFilter(filter);
+            fileChooser.showOpenDialog(null);
+            File file = fileChooser.getSelectedFile();
+            Scanner scanner = null;
+            try {
+                scanner = new Scanner(file);
+                staticVar.lessons = new lessons();
+
+            while(scanner.hasNextLine())
+            {
+                String data = scanner.nextLine();
+                String[] arr = data.split("~");
+                boolean isExist = false ;
+                int location = 0 ;
+                for (lesson lesson : staticVar.lessons.lessons)
+                {
+                    location++;
+                    if (lesson.code.equalsIgnoreCase(arr[0]))
+                    {
+                        isExist = true;
+                        break;
+                    }
+                }
+                if (isExist)
+                {
+                    staticVar.lessons.lessons.get(location-1).addSection(arr[2]);
+                }else
+                    {
+                        lesson templesson = new lesson(arr[0],Integer.parseInt(arr[1]));
+                        templesson.addSection(arr[2]);
+                        staticVar.lessons.lessons.add(templesson);
+                    }
+            }
+            } catch (Exception exception) {
+            }
+        });
     }
+    public String ArrOfTime(int time1,int time2)
+    {
+        String startCode= findTimeCode(time1),finishCode= (Integer.parseInt(findTimeCode(time2))+1)+"";
+
+        return startCode+" - "+finishCode;
+    }
+    private String findTimeCode(int temp)
+    {
+
+        return switch (temp) {
+            case  0 -> "09";
+            case  1 -> "10";
+            case  2 -> "11";
+            case  3 -> "12";
+            case  4 -> "13";
+            case  5 -> "14";
+            case  6 -> "15";
+            case  7 -> "16";
+            case  8 -> "17";
+            case  9 -> "18";
+            case 10 -> "19";
+            case 11 -> "20";
+            case 12 -> "21";
+            default -> throw new IllegalStateException("Unexpected value: " + temp);
+        };
+    }
+    private String FindDay(int temp)
+    {
+        String Day = switch (temp) {
+            case 0 -> "Mo";
+            case 1 -> "Tu";
+            case 2 -> "We";
+            case 3 -> "Th";
+            case 4 -> "Fr";
+            default -> throw new IllegalStateException("Unexpected value: " + temp);
+        };
+        return Day;
+    }
+    private String Convert(section section)
+    {
+        String result = "";
+        for (int i = 0 ; i<section.numberOfDay; i++)
+        {
+            result += FindDay(section.times[i].dayCode)+" "+ArrOfTime(section.times[i].timeCode[0],section.times[i].timeCode[section.times[i].timeCode.length-1])+" ";
+        }
+        return result;
+    }
+
 }
