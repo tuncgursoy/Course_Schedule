@@ -1012,12 +1012,6 @@
           </grid>
         </constraints>
       </vspacer>
-      <component id="f2f39" class="javax.swing.JComboBox" binding="comboBox1" default-binding="true">
-        <constraints>
-          <grid row="1" column="6" row-span="2" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
-        </constraints>
-        <properties/>
-      </component>
       <component id="103eb" class="javax.swing.JButton" binding="calculateButton" default-binding="true">
         <constraints>
           <grid row="2" column="5" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
@@ -1080,6 +1074,20 @@
         </constraints>
         <properties>
           <text value="Open Program"/>
+        </properties>
+      </component>
+      <component id="f2f39" class="javax.swing.JComboBox" binding="comboBox1" default-binding="true">
+        <constraints>
+          <grid row="1" column="6" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties/>
+      </component>
+      <component id="52356" class="javax.swing.JButton" binding="getInfoButton">
+        <constraints>
+          <grid row="2" column="6" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Get Info"/>
         </properties>
       </component>
     </children>

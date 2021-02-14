@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class GUI {
@@ -81,10 +82,12 @@ public class GUI {
     private JButton deleteLessonButton;
     private JButton saveButton;
     private JButton openProgramButton;
+    private JButton getInfoButton;
     private JButton csvReadButton;
     static JFrame addSection;
     static JFrame addLesson;
     static JFrame deleteLesson;
+    static JFrame GetInfo;
     static JButton tempAddLesson;
     static JButton tempDeleteSectionButton;
     static JButton tempAddSection;
@@ -416,11 +419,25 @@ public class GUI {
                     {
                         lesson templesson = new lesson(arr[0],Integer.parseInt(arr[1]));
                         templesson.addSection(arr[2]);
-                        staticVar.lessons.lessons.add(templesson);
+                        staticVar.lessons.addLesson(templesson);
                     }
             }
             } catch (Exception exception) {
             }
+        });
+        getInfoButton.addActionListener(e -> {
+            GetInfo = new JFrame();
+            GetInfo.setContentPane(new GetInfo((option) Objects.requireNonNull(comboBox1.getSelectedItem()),staticVar.lessons.totalCredit).panel);
+            GetInfo.setVisible(true);
+            GetInfo.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+            int w = GetInfo.getSize().width;
+            int h = GetInfo.getSize().height;
+            int x = (dim.width-w)/2;
+            int y = (dim.height-h)/2;
+            GetInfo.setLocation(x, y);
+            GetInfo.setResizable(false);
+            GetInfo.pack();
         });
     }
     public String ArrOfTime(int time1,int time2)
