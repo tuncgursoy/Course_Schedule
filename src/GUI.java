@@ -102,6 +102,7 @@ public class GUI {
             public void actionPerformed(ActionEvent e){
                 addLesson = new JFrame();
                 addLesson.setContentPane(new AddLesson().panel);
+                addLesson.setTitle("Add Lesson");
                 addLesson.setVisible(true);
                 addLesson.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                 Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
@@ -119,6 +120,7 @@ public class GUI {
         addSectionButton.addActionListener(e -> {
             addSection = new JFrame();
             addSection.setContentPane(new AddSection().panel1);
+            addSection.setTitle("Add Section");
             addSection.setVisible(true);
             addSection.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
@@ -132,12 +134,11 @@ public class GUI {
             tempAddSection = addSectionButton;
             addSection.pack();
         });
-        newProgramButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                staticVar.lessons = new lessons();
-                comboBox1.removeAllItems();
-            }
+        newProgramButton.addActionListener(e -> {
+            staticVar.lessons = new lessons();
+            comboBox1.removeAllItems();
+            getInfoButton.setEnabled(false);
+
         });
         calculateButton.addActionListener(e -> {
             staticVar.options = null;
@@ -183,15 +184,17 @@ public class GUI {
                i++;
            }
            comboBox1.removeAllItems();
-           for (option option : staticVar.options[staticVar.lessons.lessons.size()-1])
-           {
-               if (option.isAvailable) {
-                   comboBox1.addItem(option);
+           if (staticVar.options.length!=0) {
+               for (option option : staticVar.options[staticVar.lessons.lessons.size() - 1]) {
+                   if (option.isAvailable) {
+                       comboBox1.addItem(option);
+                   }
                }
            }
         });
         comboBox1.addActionListener(e -> {
             try {
+                getInfoButton.setEnabled(true);
                 for (option option : staticVar.options[staticVar.lessons.lessons.size() - 1]) {
                     if (comboBox1.getSelectedItem() == option) {
                         int daycount = 0;
@@ -301,6 +304,7 @@ public class GUI {
                 deleteSection = new JFrame();
                 deleteSection.setContentPane(new DeleteSection().panel);
                 deleteSection.setVisible(true);
+                deleteSection.setTitle("Delete Section");
                 deleteSection.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                 Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
                 int w = deleteSection.getSize().width;
@@ -319,6 +323,7 @@ public class GUI {
                 deleteLesson = new JFrame();
                 deleteLesson.setContentPane(new DeleteLesson().panel);
                 deleteLesson.setVisible(true);
+                deleteLesson.setTitle("Delete Lesson");
                 deleteLesson.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                 Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
                 int w = deleteLesson.getSize().width;
@@ -429,6 +434,7 @@ public class GUI {
             GetInfo = new JFrame();
             GetInfo.setContentPane(new GetInfo((option) Objects.requireNonNull(comboBox1.getSelectedItem()),staticVar.lessons.totalCredit).panel);
             GetInfo.setVisible(true);
+            GetInfo.setTitle("Info");
             GetInfo.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
             int w = GetInfo.getSize().width;
