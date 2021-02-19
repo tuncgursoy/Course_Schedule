@@ -32,6 +32,7 @@ public class DeleteLesson {
                     }
             }
             staticVar.lessons.lessons = lessons;
+            staticVar.lessons.totalCredit-= temp.credit;
             GUI.deleteLesson.dispose();
             JOptionPane.showMessageDialog(new JFrame(), "Lesson Deleted From DB: "+temp.code);
         });
