@@ -13,7 +13,7 @@ public class AddSection {
     AddSection()
     {
         try {
-
+            comboBox1.removeAllItems();
             for (lesson lesson :staticVar.lessons.lessons)
             {
                 comboBox1.addItem(lesson.code);
@@ -23,9 +23,12 @@ public class AddSection {
                 comboBox1.setSelectedIndex(0);
             }else if(!staticVar.AddSectionTemp[1].equalsIgnoreCase(""))
             {
-                if (comboBox1.getItemAt(Integer.parseInt(staticVar.AddSectionTemp[0])).toString().equals(staticVar.AddSectionTemp[1]))
-                {
-                    comboBox1.setSelectedIndex(Integer.parseInt(staticVar.AddSectionTemp[0]));
+                if (comboBox1.getItemCount()>Integer.parseInt(staticVar.AddSectionTemp[0])) {
+                    if (comboBox1.getItemAt(Integer.parseInt(staticVar.AddSectionTemp[0])).toString().equals(staticVar.AddSectionTemp[1])) {
+                        comboBox1.setSelectedIndex(Integer.parseInt(staticVar.AddSectionTemp[0]));
+                    } else {
+                        comboBox1.setSelectedIndex(0);
+                    }
                 }else
                     {
                         comboBox1.setSelectedIndex(0);
@@ -34,9 +37,17 @@ public class AddSection {
                 {
                     comboBox1.setSelectedIndex(0);
                 }
+            if (comboBox1.getItemCount()>Integer.parseInt(staticVar.AddSectionTemp[0])) {
+                if (comboBox1.getItemAt(Integer.parseInt(staticVar.AddSectionTemp[0])).equals(staticVar.AddSectionTemp[1])) {
+                    textField2.setText(staticVar.lessons.lessons.get(Integer.parseInt(staticVar.AddSectionTemp[0])).sections.size() + 1 + "");
+                } else {
+                    textField2.setText(staticVar.lessons.lessons.get(0).sections.size() + 1 + "");
+                }
+            } else {
+                textField2.setText(staticVar.lessons.lessons.get(0).sections.size() + 1 + "");
+            }
 
 
-        textField2.setText(staticVar.lessons.lessons.get(Integer.parseInt(staticVar.AddSectionTemp[0])).sections.size()+1+"");
         }catch (Exception e)
         {
             JOptionPane.showMessageDialog(new JFrame(),"No Lesson Added");
